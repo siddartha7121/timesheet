@@ -1,0 +1,125 @@
+<?php 
+session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+include('connection.php');
+echo "c";
+$id = $_SESSION['id'];
+$username = $_SESSION['name'];
+
+if (isset($_POST['submit'])) {
+    // Accessing field inputs
+    $date1 = $_POST['datee'];
+    $rows = $_POST['rows'];
+
+    $count = 0;
+    if ($date1 != null && $date1 <= date('Y-m-d')) {
+
+        // Getting userid
+        $selectid = "SELECT id FROM user_details WHERE date = :date1 AND empid = :id";
+        $stmt = $conn->prepare($selectid);
+        $stmt->bindParam(':date1', $date1);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        $idrec = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($idrec) {
+            $userid = $idrec['id'];
+        } else {
+            $query = "INSERT INTO user_details (empid, date) VALUES (:id, :date1)";
+            $stmt = $conn->prepare($query);
+            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':date1', $date1);
+            $stmt->execute();
+        }
+
+        for ($i = 1; $i <= $rows; $i++) {
+            $work = isset($_POST['work-' . $i]) ? $_POST['work-' . $i] : null;
+            $starttime = isset($_POST['starttime-' . $i]) ? $_POST['starttime-' . $i] : null;
+            $startminute = isset($_POST['startminute-' . $i]) ? $_POST['startminute-' . $i] : null;
+            $endtime = isset($_POST['endtime-' . $i]) ? $_POST['endtime-' . $i] : null;
+            $endminute = isset($_POST['endminute-' . $i]) ? $_POST['endminute-' . $i] : null;
+
+            $workid = null;
+            if ($work != null) {
+                $selectwork = "SELECT id FROM work_type WHERE work_type = :work";
+                $stmt = $conn->prepare($selectwork);
+                $stmt->bindParam(':work', $work);
+                $stmt->execute();
+                $workrec = $stmt->fetch(PDO::FETCH_ASSOC);
+                if ($workrec) {
+                    $workid = $workrec['id'];
+                }
+            }
+
+            $query = "SELECT * FROM timesheet_data WHERE userid = :userid";
+            $stmt = $conn->prepare($query);
+            $stmt->bindParam(':userid', $userid);
+            $stmt->execute();
+            $check = true;
+
+            if ($work != null && $starttime != null && $endtime != null) {
+                $start_time = (int)(((int)$starttime * 60) + (int)$startminute);
+                $end_time = (int)(((int)$endtime * 60) + (int)$endminute);
+
+                if ($start_time < $end_time) {
+                    $lastEndTime = 0;
+                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    foreach ($result as $res) {
+                        $stime = $res['start_time'];
+                        $etime = $res['end_time'];
+                        $lastEndTime = $etime;
+
+                        if ($start_time == $stime && $end_time == $etime) {
+                            $check = false;
+                            echo "<script>alert('Unable to insert data with the same start time and end time');</script>";
+                            break;
+                        } else {
+                            $check = true;
+                        }
+                    }
+
+                    if ($check) {
+                        if ($lastEndTime <= $start_time) {
+                            $query = "INSERT INTO timesheet_data (start_time, end_time, userid, worktypeid)
+                                      VALUES (:start_time, :end_time, :userid, :workid)";
+                            $stmt = $conn->prepare($query);
+                            $stmt->bindParam(':start_time', $start_time);
+                            $stmt->bindParam(':end_time', $end_time);
+                            $stmt->bindParam(':userid', $userid);
+                            $stmt->bindParam(':workid', $workid);
+                            $stmt->execute();
+
+                            echo "<script>
+                                if (window.confirm('Data saved successfully')) {
+                                    window.location.href = 'dashboard.php';                             
+                                } 
+                                </script>";
+                        } else {
+                            echo "<script>
+                                alert('Please make sure start time should be greater than the previous end time');
+                                </script>";
+                        }
+                    }
+                } else {
+                    echo "<script>
+                        alert('Please make sure start time should be less than end time');
+                        </script>";
+                }
+            } else if ($work == null && $starttime == null && $endtime == null) {
+                $count++;
+                if ($i == 5 && $count == 5)
+                    echo "<script>
+                        alert('Please select work type, start time, and end time');
+                        </script>";
+                continue;
+            } else {
+                continue;
+            }
+        }
+    } else {
+        echo "<script>alert('Please fill the date field');</script>";
+    }
+}
+?>

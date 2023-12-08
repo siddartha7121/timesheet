@@ -1,0 +1,41 @@
+#mcon {
+    background-color: #ebeceb;
+
+}
+
+.hours {
+    width: 40px;
+    height: 30px;
+    flex-basis: 20%;
+}
+
+.drag {
+    list-style-type: none;
+}
+#bgcolor{
+    background-image: linear-gradient(rgba(190, 254, 246, 0.915),rgb(228, 228, 240),rgb(250, 177, 177));
+}
+#time,
+#role,#minutes {
+    background-image: linear-gradient(rgb(233, 192, 233), rgb(207, 245, 245), rgb(181, 181, 238));
+}
+
+.createStyle {
+    background-color: #ecebeb;
+}
+
+.width {
+    width: 30%;
+}
+
+.color {
+    color: red;
+}
+.background{
+background-color: #f8d8f3;
+
+}
+
+#edittable input{
+    width: 100%;
+}
