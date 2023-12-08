@@ -39,3 +39,27 @@ background-color: #f8d8f3;
 #edittable input{
     width: 100%;
 }
+/* if ($date1 != null && $date1 <= date('Y-m-d')) {
+    // Getting user id with a prepared statement
+    $selectid = "SELECT id FROM user_details WHERE date = :date AND empid = :empid";
+    $stmt = $conn->prepare($selectid);
+    $stmt->bindParam(':date', $date1);
+    $stmt->bindParam(':empid', $id);
+    $stmt->execute();
+    $idrec = $stmt->fetch(PDO::FETCH_ASSOC);
+    // print_r($_POST);
+    for ($i = 1; $i <= (count($_POST)-2)/5; $i++){
+        $work = $_POST['work-' . $i];
+        $work=$pri["$work"];
+        echo($work);
+        // $starttime = $_POST['starttime-' . $i];       
+        // $start_minute = $_POST['startminute-' . $i];  
+        // $start_time = (int) (((int) $starttime * 60) + (int) $start_minute);
+        // $endtime = $_POST['endtime-' . $i];
+        // $end_minute = $_POST['endminute-' . $i];
+        // $end_time = (int) (((int) $endtime * 60) + (int) $end_minute);
+        // $query = "insert into timesheet_data(start_time,end_time,userid,worktypeid)
+        //                        values('$start_time','$end_time','$id','$workid')";
+    }
+
+    $pri=['development'=>1 , 'testing'=>2 , 'projectmanagement'=>3 , 'research'=>4 , 'meetings'=>5 , 'training'=>6 , 'support'=>7]; */

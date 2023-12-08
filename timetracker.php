@@ -25,7 +25,6 @@ if (isset($_POST['submit'])) {
             $conn->exec($query);
             for ($i = 1; $i <= (count($_POST)-2)/5; $i++){
                 $work = $_POST['work-' . $i];
-                // echo($work);
                 if($work){
                 $workid=$pri["$work"];
                 $starttime = $_POST['starttime-' . $i];       
@@ -37,9 +36,9 @@ if (isset($_POST['submit'])) {
                 $query = "INSERT INTO timesheet_data (start_time, end_time, userid, worktypeid) VALUES (?, ?, ?, ?)";
                 $stmt = $conn->prepare($query);
                 $stmt->execute([$start_time, $end_time, $id, $workid]);
-                echo "<script>window.location.href = 'dashboard.php';</script>";
                 }
             }
+            echo "<script>window.location.href = 'dashboard.php';</script>";
             
         } else {
             echo "<script>window.location.href = 'dashboard.php';</script>";
@@ -199,8 +198,6 @@ if (isset($_POST['submit'])) {
 
                 </div>
             </div>
-
-
             <script>
             let time_har = 0;
             let time_mnts = 0;

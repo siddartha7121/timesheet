@@ -1,6 +1,6 @@
 <?php
-include("connection.php");
 session_start();
+include("connection.php");
 $id = $_SESSION['id'];
 $username = $_SESSION['name'];
 //getting data from url
@@ -9,7 +9,6 @@ $date = $_GET['date'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
