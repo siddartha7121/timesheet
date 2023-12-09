@@ -177,7 +177,8 @@ $role = $_SESSION['role'];
 
             $('.edit').click(function() {
                 var date = $(this).data('param1');
-                window.location.href = 'editmain.php?date=' + date;
+                // window.location.href = 'editmain.php?date=' + date;
+                window.location.href = 'edittimesheet.php?date=' + date;
                 var id = JSON.stringify($(this).data('param'));
 
             });

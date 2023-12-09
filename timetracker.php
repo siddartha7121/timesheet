@@ -33,9 +33,9 @@ if (isset($_POST['submit'])) {
                 $endtime = $_POST['endtime-' . $i];
                 $end_minute = $_POST['endminute-' . $i];
                 $end_time = (int) (((int) $endtime * 60) + (int) $end_minute);
-                $query = "INSERT INTO timesheet_data (start_time, end_time, userid, worktypeid) VALUES (?, ?, ?, ?)";
+                $query = "INSERT INTO timesheet_data (start_time, end_time, userid, worktypeid , date) VALUES (?, ?, ?, ?, ?)";
                 $stmt = $conn->prepare($query);
-                $stmt->execute([$start_time, $end_time, $id, $workid]);
+                $stmt->execute([$start_time, $end_time, $id, $workid, $date1]);
                 }
             }
             echo "<script>window.location.href = 'dashboard.php';</script>";
